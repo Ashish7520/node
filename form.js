@@ -1,9 +1,7 @@
 const http=require('http')
-const routes= require('./routs.js')
-const server=http.createServer((routes)=>{
 
-    
-   
-})
+const routs= require('./routs')
+
+const server=http.createServer(routs)
 
 server.listen(4000)

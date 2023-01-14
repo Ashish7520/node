@@ -1,36 +1,27 @@
-//importing express
+const path = require('path');
+
 const express = require('express');
-
-//importing bodyparser
-
-const bodyParser = require('body-parser')
-
-const path = require('path')
+const bodyParser = require('body-parser');
 
 const app = express();
 
-const adminRoutes = require('./routes/admin')
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-const shopRoutes= require('./routes/shop')
+const contactUs = require('./routes/contact')
 
-const contactRoutes= require('./routes/contact-us')
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorController = require('./controller/404')
+const successMsg = require('./routes/success')
 
-const successMsg = require('./routes/form-sucess')
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(bodyParser.urlencoded({extended:false}))
-
-app.use("/admin" ,adminRoutes)
-
-app.use(shopRoutes)
-
-app.use(contactRoutes)
-
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
+app.use(contactUs)
 app.use(successMsg)
+app.use(errorController.get404);
 
-//for error page
-
-app.use((req,res,next)=>{
-    res.status(404).sendFile(path.join(__dirname, 'view' , '404.html'))
-})
-
-app.listen(3000)
+app.listen(3000);

@@ -13,13 +13,19 @@ const adminRoutes = require('./routes/admin')
 
 const shopRoutes= require('./routes/shop')
 
-app.use(bodyParser.urlencoded({extended:false}))
+const contactRoutes= require('./routes/contact-us')
 
-app.use(express.static(path.join(__dirname,'public')))
+const successMsg = require('./routes/form-sucess')
+
+app.use(bodyParser.urlencoded({extended:false}))
 
 app.use("/admin" ,adminRoutes)
 
 app.use(shopRoutes)
+
+app.use(contactRoutes)
+
+app.use(successMsg)
 
 //for error page
 

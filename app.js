@@ -1,34 +1,15 @@
-const http=require('http')
+const express = require('express');
 
-const server=http.createServer((req,res)=>{
+const app = express();
 
-    const url=req.url
-    if(url === '/home'){
-        res.write('<html>')
-    res.write('<head><title> my first page</title></head>')
-    res.write('<body><h1> Welcome Home</h1></body>')
-    res.write('</html>')
-    res.end()
-    }else if(url === '/about'){
-        res.write('<html>')
-    res.write('<head><title> my first page</title></head>')
-    res.write('<body><h1> welcome about us page</h1></body>')
-    res.write('</html>')
-    res.end()
-    }else if(url === '/node'){
-        res.write('<html>')
-    res.write('<head><title> my first page</title></head>')
-    res.write('<body><h1>Welcome to my node js project</h1></body>')
-    res.write('</html>')  
-    res.end()
-    }
-    //process.exit();- to exit from the server
-    // res.setHeader('Content-Type', 'text/html')
-    // res.write('<html>')
-    // res.write('<head><title> my first page</title></head>')
-    // res.write('<body><h1> Hello from my node.js server</h1></body>')
-    // res.write('</html>')
-    // req.end()
-})
+app.use((req, res, next) => {
+    console.log('In the middleware!');
+    next(); // Allows the request to continue to the next middleware in line
+});
 
-server.listen(4000)
+app.use((req, res, next) => {
+    console.log('In another middleware!');
+    res.send('<h1>Hello from Express!</h1>');
+});
+
+app.listen(3000)

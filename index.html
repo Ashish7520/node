@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test Form</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+  <div class="container">
+	<h1>User Form</h1>
+	<form id="user-form">
+    <div class="form-group">
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name" required>
+  </div>
+		<br>
+    <div class="form-group">
+		<label for="email">Email:</label>
+		<input type="email" id="email" name="email" required>
+  </div>
+		<br>
+    <div class="form-group">
+		<label for="mobile">Mobile:</label>
+		<input type="tel" id="mobile" name="mobile" required>
+  </div>
+		<br>
+		<button type="submit">Submit</button>
+	</form>
+</div>
+<div class="container">
+	<h1>Users</h1>
+	<div id="user-list">
+    </div>
+		<!-- User list will be added here dynamically -->
+	</ul>
+
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		// Get user list
+		axios.get('http://localhost:5501/user/get-user')
+			.then(response => {
+				const users = response.data;
+				const userList = document.getElementById('user-list');
+				users.forEach(user => {
+					const div = document.createElement('div');
+					div.className = 'user';
+					const name = document.createElement('span');
+					name.innerText = user.name;
+					const email = document.createElement('span');
+					email.innerText = user.email;
+					const mobile = document.createElement('span');
+					mobile.innerText = user.mobile;
+					// const editButton = document.createElement('button');
+					// editButton.innerText = 'Edit';
+					// editButton.addEventListener('click', () => editUser(user.id));
+					const deleteButton = document.createElement('button');
+					deleteButton.innerText = 'Delete';
+					deleteButton.addEventListener('click', () => deleteUser(user.id));
+					div.appendChild(name);
+					div.appendChild(email);
+					div.appendChild(mobile);
+					//div.appendChild(editButton);
+					div.appendChild(deleteButton);
+					userList.appendChild(div);
+				});
+			})
+			.catch(error => {
+				console.log('Error while getting users:', error);
+			});
+
+		// Add new user
+		const form = document.getElementById('user-form');
+		form.addEventListener('submit', event => {
+			event.preventDefault();
+			const name = document.getElementById('name').value;
+			const email = document.getElementById('email').value;
+			const mobile = document.getElementById('mobile').value;
+
+			axios.post('http://localhost:5501/user/add-user', {
+				name: name,
+				email: email,
+				mobile: mobile
+			})
+			.then(response => {
+				console.log('User added successfully:', response.data);
+				location.reload();
+			})
+			.catch(error => {
+				console.log('Error while adding user:', error);
+			});
+		});
+
+
+
+		// Delete user
+		function deleteUser(userId) {
+			axios.delete(`http://localhost:5501/user/delete/${userId}`)
+				.then(response => {
+					console.log('User deleted successfully:', response.data);
+					location.reload();
+				})
+				.catch(error => {
+					console.log('Error while deleting user:', error);})}
+
+    
+				
+
+	</script>
+</body>
+</html>
